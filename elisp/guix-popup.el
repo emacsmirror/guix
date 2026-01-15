@@ -120,7 +120,7 @@
   "Show popup buffer for service commands."
   ["Show services"
    ("s" "all system services" guix-all-services)
-   ("a" "all home services"   guix-all-home-services)
+   ("h" "all home services"   guix-all-home-services)
    ("d" "default"             guix-default-services)
    ("n" "by name"             guix-services-by-name)
    ("r" "by regexp"           guix-services-by-regexp)
