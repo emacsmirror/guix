@@ -72,6 +72,7 @@
 (require 'guix-build-log)
 (require 'guix-guile)
 (require 'guix-external)
+(require 'magit-popup)
 
 (defgroup guix-commands nil
   "Settings for guix popup windows."
