@@ -57,7 +57,7 @@
            ,(lambda (button)
               (browse-url (button-label button))))
     "\nEmacs-Guix: "
-    :link ("https://emacs-guix.gitlab.io/website/"
+    :link ("https://codeberg.com/guix/emacs-guix"
            ,(lambda (button)
               (browse-url (button-label button))))
     "\n\n"
