@@ -1,5 +1,37 @@
 -*- mode: org -*-
 
+* Changes in 0.6.0 (since 0.5.2)
+** User visible changes
+*** New commands
+
+**** M-x guix-all-home-services
+
+It is bound to ?h in "M-x guix-service-popup"
+
+**** M-x guix-home-profile
+
+*** Removed commands
+
+**** M-x guix-search-by-regexp
+
+"M-x guix-packages-by-regexp" should be used instead.
+
+**** M-x guix-search-by-name
+
+"M-x guix-packages-by-name-regexp" should be used instead.
+
+*** Changed
+
+**** M-x guix-report-bug
+
+Reporting bugs via email got deprecated, the command will open Codeberg issues in browser instead.
+
+
+** Internal changes
+
+- Migrate most menus to transient
+- Locating package/service definitions for edit now respects %load-path
+  
 * Changes in 0.5.2 (since 0.5.1.1)
 
 ** User visible changes
