@@ -6,7 +6,7 @@
 ;; Version: 0.5.2
 ;; URL: https://emacs-guix.gitlab.io/website/
 ;; Keywords: tools
-;; Package-Requires: ((emacs "24.3") (dash "2.11.0") (geiser "0.8") (bui "1.2.0") (transient "0.3.0") (edit-indirect "0.1.4"))
+;; Package-Requires: ((emacs "24.3") (dash "2.11.0") (geiser "0.8") (bui "1.2.0") (transient "0.3.0") (edit-indirect "0.1.4") (magit-popup "2.13.3"))
 
 ;; This file is part of Emacs-Guix.
 
