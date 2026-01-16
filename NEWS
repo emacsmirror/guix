@@ -1,5 +1,9 @@
 -*- mode: org -*-
 
+* Changes in 0.6.1 (since 0.6.0)
+
+This is a bug-fix release to update repository url with correct domain.
+
 * Changes in 0.6.0 (since 0.5.2)
 ** User visible changes
 *** New commands
