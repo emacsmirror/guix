@@ -125,9 +125,6 @@ of RESULT.  ENTRIES is a list of manifest entries with NAME/VERSION."
 
 ;;; Search paths
 
-(define search-path-environment-variables
-  search-path-environment-variables)
-
 (define* (search-paths profiles #:key (type 'exact))
   "Return a list with 'search paths' environment variables for PROFILES."
   (let* ((manifests (map profile-manifest profiles))
