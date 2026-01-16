@@ -25,7 +25,9 @@
 
 ;;; Code:
 
+(require 'browse-url)
 (require 'cl-lib)
+(require 'url-util)
 (eval-when-compile (require 'subr-x))
 
 (require 'guix nil t)
@@ -354,15 +356,24 @@ If VERBOSE is non-nil (with prefix argument), produce verbose output."
 
 ;;; Reporting Guix bugs
 
-(defvar guix-bug-address "bug-guix@gnu.org"
-  "Email address for the GNU Guix bugs.")
+(defvar guix-bug-template ".forgejo/issue_template/bug-reporting.md"
+  "Bug reporting template.")
 
 ;;;###autoload
 (defun guix-report-bug (subject)
   "Report GNU Guix bug.
-Prompt for bug subject and open a mail buffer."
-  (interactive "sBug Subject: ")
-  (compose-mail guix-bug-address subject))
+Prompt for bug subject and open bug submission form in browser."
+  (interactive
+   (list
+    (and (yes-or-no-p
+          (concat "Note that a user account is necessary to submit bugs."
+                  " Proceed with opening codeberg.org in a browser?"))
+         (read-string "Bug Subject: "))))
+
+  (when subject
+    (browse-url (concat "https://codeberg.org/guix/guix/issues/new?"
+                        (url-build-query-string `((template ,guix-bug-template)
+                                                  (title ,subject)))))))
 
 (provide 'guix-misc)
 
