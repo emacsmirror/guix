@@ -37,7 +37,10 @@ shouldn't end with a trailing slash.")
 (defvar guix-hash-regexp
   ;; Hash-parts do not include "e", "o", "u" and "t".  See base32Chars
   ;; at <https://github.com/NixOS/nix/blob/master/src/libutil/hash.cc>
-  (rx (= 32 (any "0-9" "a-d" "f-n" "p-s" "v-z")))
+  (let ((base32chars '("0-9" "a-d" "f-n" "p-s" "v-z")))
+    (rx-to-string `(and (= 7 (any ,@base32chars))
+                        (group (= 25 (any ,@base32chars))))
+                  t))
   "Regexp matching hash part of a store file name.")
 
 ;;;###autoload

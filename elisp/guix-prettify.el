@@ -109,8 +109,12 @@ This will transform
   :type 'regexp
   :group 'guix-prettify)
 
-(defcustom guix-prettify-regexp-group 1
-  "Regexp group in `guix-prettify-regexp' for prettifying."
+(defcustom guix-prettify-regexp-group 2
+  "Regexp group in `guix-prettify-regexp' for prettifying.
+
+The default value of `guix-prettify-regexp' introduces 2 capturing
+groups. Selecting the first group will prettify the full hash. Selecting
+the second group will show a 7 caracters hash prefix."
   :type 'integer
   :group 'guix-prettify)
 
