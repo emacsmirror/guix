@@ -49,6 +49,9 @@ AC_SUBST([guileccachedir])
 AC_MSG_CHECKING([for the Guile ccache directory])
 AC_MSG_RESULT([$guileccachedir])
 
+AC_PATH_PROG([GUIX], [guix])
+AC_SUBST([GUIX])
+
 AC_ARG_WITH([guix-site-dir],
   [AS_HELP_STRING([--with-guix-site-dir],
     [directory with Guix modules (*.scm files)])],

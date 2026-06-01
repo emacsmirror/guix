@@ -57,6 +57,7 @@
 (require 'guix-external)
 (require 'guix-profiles)
 (require 'guix-utils)
+(require 'rx)
 
 (defvar guix-load-path nil
   "Directory or a list of directories prepended to Guile's
@@ -73,7 +74,7 @@ These directories are also prepended to `%load-compiled-path'
 unless `guix-load-compiled-path' is specified.")
 
 (defvar guix-load-compiled-path nil
-  "List of directories prepended to Guile's `%load-compiled-path'
+  "Directory or list of directories prepended to Guile's `%load-compiled-path'
 when Guix REPL is started.
 
 See `guix-load-path' for details.")
@@ -203,33 +204,50 @@ After setting this variable, you need to kill
   "Message telling about successful Guix operation."
   (message "Guix operation has been performed."))
 
+(defun guix-repl--guix-command-p (program)
+  "Return non-nil when the REPL program is `guix'."
+  (string-match-p (rx (or bos "/") "guix" eos)
+                  program))
+
+(defun guix-repl--load-path-args (paths)
+  "Return -L arguments for PATHS."
+  (--mapcat (list "-L" (guix-file-name it)) paths))
+
+(defun guix-repl-load-compiled-path-args (paths program)
+  "Return -C arguments for PATHS when supported by the launcher."
+  (unless (guix-repl--guix-command-p program)
+    (--mapcat (list "-C" (guix-file-name it)) paths)))
+
 (defun guix-repl-guile-args ()
   "Return a list of Guile's arguments to start Guix REPL."
-  `(,@(and guix-load-path
-           (let* ((lp  (guix-list-maybe guix-load-path))
-                  (lcp (if guix-load-compiled-path
-                           (guix-list-maybe guix-load-compiled-path)
-                         lp)))
-             (append (--mapcat (list "-L" (guix-file-name it)) lp)
-                     (--mapcat (list "-C" (guix-file-name it)) lcp))))
-    "-L" ,guix-scheme-directory
-    ,@(and guix-config-scheme-compiled-directory
-           (list "-C" guix-config-scheme-compiled-directory))
-    ,@(and guix-repl-use-latest
-           (if (file-exists-p guix-pulled-profile)
-               (let ((scm-dir (guix-guile-site-directory
-                               guix-pulled-profile))
-                     (go-dir  (guix-guile-site-directory
-                               guix-pulled-profile 'go)))
-                 (list "-L" scm-dir
-                       "-C" (or go-dir scm-dir)))
-             ;; For backward compatibility.
-             (--when-let (guix-latest-directory)
-               (list "-L" it "-C" it))))
-    ,@(and guix-config-guix-scheme-directory
-           (list "-L" guix-config-guix-scheme-directory
-                 "-C" (or guix-config-guix-scheme-compiled-directory
-                          guix-config-guix-scheme-directory)))))
+  (let ((program (car (guix-list-maybe guix-guile-program))))
+    `(,@(and guix-load-path
+             (let* ((lp  (guix-list-maybe guix-load-path))
+                    (lcp (or (and guix-load-compiled-path
+                                  (guix-list-maybe guix-load-compiled-path))
+                             lp)))
+               (append (guix-repl--load-path-args lp)
+                       (guix-repl-load-compiled-path-args lcp program))))
+      "-L" ,guix-scheme-directory
+      ,@(and guix-repl-use-latest
+             (if (file-exists-p guix-pulled-profile)
+                 (let ((scm-dir (guix-guile-site-directory
+                                 guix-pulled-profile))
+                       (go-dir  (guix-guile-site-directory
+                                 guix-pulled-profile 'go)))
+                   (append (list "-L" scm-dir)
+                           (guix-repl-load-compiled-path-args
+                            (list (or go-dir scm-dir)) program)))
+               ;; For backward compatibility.
+               (--when-let (guix-latest-directory)
+                 (append (list "-L" it)
+                         (guix-repl-load-compiled-path-args (list it) program)))))
+      ,@(and guix-config-guix-scheme-directory
+             (append (list "-L" guix-config-guix-scheme-directory)
+                     (guix-repl-load-compiled-path-args
+                      (list (or guix-config-guix-scheme-compiled-directory
+                                guix-config-guix-scheme-directory))
+                      program))))))
 
 (defun guix-repl-guile-program (&optional internal)
   "Return a value suitable for `geiser-guile-binary' to start Guix REPL.
@@ -285,9 +303,25 @@ display messages."
                        (funcall guix-repl-socket-file-name-function)))))
       (let ((geiser-guile-binary (guix-repl-guile-program internal))
             (repl (get-buffer-create
-                   (guix-get-repl-buffer-name internal))))
+                   (guix-get-repl-buffer-name internal)))
+            (load-path* (mapcar #'file-truename (if (stringp guix-load-path)
+                                                    (list guix-load-path)
+                                                  guix-load-path)))
+            (load-compiled-path* (mapcar #'file-truename
+                                         (if (stringp guix-load-compiled-path)
+                                             (list guix-load-compiled-path)
+                                           guix-load-compiled-path))))
         (guix-start-repl repl (and internal guix-repl-current-socket))
         (set repl-var repl)
+        (when load-path*
+          (guix-geiser-eval-in-repl-synchronously
+           (format "(set! %%load-path (append '%S %%load-path))" load-path*)
+           repl t t))
+        (when load-compiled-path*
+          (guix-geiser-eval-in-repl-synchronously
+           (format "(set! %%load-compiled-path (append '%S %%load-compiled-path))"
+                   load-compiled-path*)
+           repl t t))
         ;; Wait until switching to (emacs-guix) module finishes.
         (guix-geiser-eval-in-repl-synchronously
          ",m (emacs-guix)" repl t t)

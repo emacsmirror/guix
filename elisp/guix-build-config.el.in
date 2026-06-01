@@ -64,7 +64,7 @@
          dir))
   "Directory with Guix compiled (*.go) files.")
 
-(defconst guix-config-guile-program "@GUILE@"
+(defconst guix-config-guile-program "@GUIX@"
   "Name of the 'guile' executable defined at configure time.")
 
 (provide 'guix-build-config)
