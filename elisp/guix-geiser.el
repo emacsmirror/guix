@@ -80,6 +80,7 @@ If NO-DISPLAY is non-nil, do not switch to the REPL buffer."
 REPL operation will be finished.
 See `guix-geiser-eval-in-repl' for the meaning of arguments."
   (let* ((repl (if repl (get-buffer repl) (guix-geiser-repl)))
+         (proc (get-buffer-process repl))
          (running? nil)
          (filter (lambda (output)
                    (setq running?
@@ -89,7 +90,10 @@ See `guix-geiser-eval-in-repl' for the meaning of arguments."
           (cons filter comint-output-filter-functions)))
     (guix-geiser-eval-in-repl str repl no-history no-display)
     (while running?
-      (sleep-for 0.1))))
+      (accept-process-output proc 0.1)
+      (unless no-display
+        (redisplay t)
+        (end-of-buffer)))))
 
 (defun guix-geiser-call (proc &rest args)
   "Call (PROC ARGS ...) synchronously using the current Geiser REPL.
