@@ -2,6 +2,7 @@
 
 ;; Copyright © 2015 Alex Kost <alezost@gmail.com>
 ;; Copyright © 2020 Daniel Nagy
+;; Copyright © 2026 Cayetano Santos <csantosb@inventati.org>
 
 ;; This file is part of Emacs-Guix.
 
@@ -200,8 +201,7 @@ For `guix-build-log-minor-mode' this map is prefixed with \\`C-c'.")
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent
      map (make-composed-keymap (list guix-build-log-common-map)
-                               special-mode-map))
-    (define-key map (kbd "c") 'compilation-shell-minor-mode)
+                               compilation-mode-map))
     (define-key map (kbd "v") 'view-mode)
     map)
   "Keymap for `guix-build-log-mode' buffers.")
@@ -322,13 +322,14 @@ forward."
   (guix-build-log-next-phase (- (or arg 1))))
 
 ;;;###autoload
-(define-derived-mode guix-build-log-mode special-mode
+(define-derived-mode guix-build-log-mode compilation-mode
   "Guix-Build-Log"
   "Major mode for viewing Guix build logs.
 
 \\{guix-build-log-mode-map}"
+  (font-lock-add-keywords nil guix-build-log-font-lock-keywords)
+  (guix-font-lock-flush)
   (setq
-   font-lock-defaults '(guix-build-log-font-lock-keywords t)
    imenu-generic-expression guix-build-log-imenu-generic-expression))
 
 ;;;###autoload
