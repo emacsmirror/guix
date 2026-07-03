@@ -490,11 +490,12 @@ really want; your value will not be overwritten.")
         (setq guix-directory dir))))
 
 (defun guix-read-directory ()
-  "Prompt for directory with scheme sources.
-This function is intended for using in `interactive' forms."
-  (and current-prefix-arg
-       (read-directory-name "Directory with scheme modules: "
-                            (guix-directory))))
+  "Return `guix-directory' or prompt for it if prefix argument is given.
+This is a helper intended for `interactive' forms."
+  (or (and current-prefix-arg
+           (read-directory-name "Directory with scheme modules: "
+                                (guix-directory)))
+      guix-directory))
 
 ;; XXX Remove `guix-latest-directory' in future: it exists for backward
 ;; compatibility (in the past "guix pull" populated
