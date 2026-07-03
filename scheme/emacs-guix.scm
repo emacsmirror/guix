@@ -82,6 +82,7 @@
                                  %temporary-directory
                                  to-emacs-side)
   #:autoload (emacs-guix utils) (search-load-path)
+  #:autoload (srfi srfi-1) (delete-duplicates)
   #:export (start-repl-server))
 
 ;; Set `guix-warning-port' here, otherwise, some output from the

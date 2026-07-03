@@ -315,11 +315,12 @@ display messages."
         (set repl-var repl)
         (when load-path*
           (guix-geiser-eval-in-repl-synchronously
-           (format "(set! %%load-path (append '%S %%load-path))" load-path*)
+           (format "(set! %%load-path (delete-duplicates (append '%S %%load-path)))"
+                   load-path*)
            repl t t))
         (when load-compiled-path*
           (guix-geiser-eval-in-repl-synchronously
-           (format "(set! %%load-compiled-path (append '%S %%load-compiled-path))"
+           (format "(set! %%load-compiled-path (delete-duplicates (append '%S %%load-compiled-path)))"
                    load-compiled-path*)
            repl t t))
         ;; Wait until switching to (emacs-guix) module finishes.
