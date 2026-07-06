@@ -45,9 +45,11 @@ If REPL is nil, use the current Geiser REPL.
 Return a list of strings with result values of evaluation."
   (let ((gc-cons-threshold (max gc-cons-threshold 10000000)))
     (with-current-buffer (or repl (guix-geiser-repl))
+      (geiser-con--connection-activate (geiser-eval--connection))
       (let ((res (geiser-eval--send/wait
                   `(:eval (:scm ,str))
                   guix-geiser-connection-timeout)))
+        (geiser-con--connection-deactivate (geiser-eval--connection))
         (unless res
           (error "\
 Sorry, the evaluation is aborted because it has taken too much time.
