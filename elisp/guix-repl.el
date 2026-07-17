@@ -330,7 +330,7 @@ display messages."
          (format "(set-package-module-path %S)"
                  (if guix-repl-use-latest
                      guix-pulled-profile
-                   (append guix-system-profile "/profile")))
+                   (concat guix-system-profile "/profile")))
          repl t t)
 
         ;; Instead of using '--listen', where the REPL server is
