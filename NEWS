@@ -1,5 +1,20 @@
 -*- mode: org -*-
 
+* Changes in 0.7.0 (since 0.6.1)
+
+This release contains a new feature =M-x guix-shell=, contributed by tusharhero.
+It builds an ad-hoc Guix profile with selected packages and sets the environment
+for the current buffer. For more information see the corresponding section of
+the manual.
+
+A long-standing bug "Incompatible byte-compiled modules" has been fixed
+elegantly by Sergio Pastor Pérez.
+
+=guix-build-log-mode= now derives from =compilation-mode=;
+=guix-geiser-eval-in-repl-synchronously= prints output as it comes;
+=guix-prettify-regexp-group= changed its default value to show store paths in a
+shorter form.
+
 * Changes in 0.6.1 (since 0.6.0)
 
 This is a bug-fix release to update repository url with correct domain.

@@ -3,7 +3,7 @@
 ;; Copyright © 2016-2019 Alex Kost <alezost@gmail.com>
 
 ;; Author: Alex Kost <alezost@gmail.com>
-;; Version: 0.6.1
+;; Version: 0.7.0
 ;; URL: https://codeberg.org/guix/emacs-guix
 ;; Keywords: tools
 ;; Package-Requires: ((emacs "24.3") (dash "2.11.0") (geiser "0.8") (bui "1.2.0") (transient "0.3.0") (edit-indirect "0.1.4") (magit-popup "2.13.3"))
