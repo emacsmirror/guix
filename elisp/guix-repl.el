@@ -313,6 +313,9 @@ display messages."
                                            guix-load-compiled-path))))
         (guix-start-repl repl (and internal guix-repl-current-socket))
         (set repl-var repl)
+        ;; Wait until switching to (emacs-guix) module finishes.
+        (guix-geiser-eval-in-repl-synchronously
+         ",m (emacs-guix)" repl t t)
         (when load-path*
           (guix-geiser-eval-in-repl-synchronously
            (format "(set! %%load-path (delete-duplicates (append '%S %%load-path)))"
@@ -323,9 +326,6 @@ display messages."
            (format "(set! %%load-compiled-path (delete-duplicates (append '%S %%load-compiled-path)))"
                    load-compiled-path*)
            repl t t))
-        ;; Wait until switching to (emacs-guix) module finishes.
-        (guix-geiser-eval-in-repl-synchronously
-         ",m (emacs-guix)" repl t t)
         (guix-geiser-eval-in-repl-synchronously
          (format "(set-package-module-path %S)"
                  (if guix-repl-use-latest
