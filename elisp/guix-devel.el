@@ -76,7 +76,8 @@ Interactively, use the module defined by the current scheme file."
 
 (defun guix-devel-setup-repl (&optional repl)
   "Setup REPL for using `guix-devel-...' commands."
-  (guix-devel-use-modules "(guix monad-repl)"
+  (guix-devel-use-modules "(guix git-download)"
+                          "(guix monad-repl)"
                           "(guix scripts)"
                           "(guix store)"
                           "(guix ui)")
@@ -149,7 +150,21 @@ Use this function to compute SHA256 hash of the package source."
     (when (or (not guix-operation-confirm)
               (y-or-n-p (format "Download '%s' package source?" def)))
       (guix-geiser-eval-in-repl
-       (format "(guix-download (origin-uri (package-source %s)))"
+       (format "(let ((uri (origin-uri (package-source %s))))
+                 (if (git-reference? uri)
+                     (let* ((url (git-reference-url uri))
+                            (commit (git-reference-commit uri))
+                            (recursive? (git-reference-recursive? uri))
+                            (args (append (list url)
+                                          (if commit
+                                              (list (string-append \"--commit=\"
+                                                                   commit))
+                                            '())
+                                          (if recursive?
+                                              (list \"--recursive\")
+                                            '()))))
+                       (apply guix-download args))
+                   (guix-download uri)))"
                def)))))
 
 (defun guix-devel-lint-package ()
