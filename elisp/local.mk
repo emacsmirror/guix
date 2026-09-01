@@ -76,6 +76,7 @@ EL_FILES =					\
   %D%/guix-hash.el				\
   %D%/guix-derivation.el			\
   %D%/guix-license.el				\
+  %D%/guix-locate.el				\
   %D%/guix-location.el				\
   %D%/guix-package.el				\
   %D%/guix-service.el				\
