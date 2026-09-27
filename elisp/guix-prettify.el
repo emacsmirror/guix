@@ -114,7 +114,7 @@ This will transform
 
 The default value of `guix-prettify-regexp' introduces 2 capturing
 groups. Selecting the first group will prettify the full hash. Selecting
-the second group will show a 7 caracters hash prefix."
+the second group will show a 7 character hash prefix."
   :type 'integer
   :group 'guix-prettify)
 

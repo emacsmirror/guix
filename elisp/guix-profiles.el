@@ -89,7 +89,7 @@ It is used by various commands as the default working profile.")
 
 (defvar guix-home-profile-regexp
   (rx-to-string guix-home-profile)
-  "Regexp maching Home profiles.")
+  "Regexp matching Home profiles.")
 
 (defvar guix-pulled-profile-regexp
   ;; XXX Should profiles from other users (HOME directories) be handled?
