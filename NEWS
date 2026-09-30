@@ -1,5 +1,52 @@
 -*- mode: org -*-
 
+* Changes in 0.8.0 (since 0.7.0)
+
+** New commands
+
+*** M-x guix-locate
+
+An interface for "guix locate", contributed by Sergio Pastor Pérez.
+It requires Consult, which is now a dependency of Emacs-Guix.
+The prompt works in glob mode by default (like "guix locate -g"), so
+wildcards are understood, and Consult extensions such as previewing a
+selected store file are available.
+
+** New library
+
+*** guix-info.el
+
+Contributed by Sergio Pastor Pérez.  It makes "info.el" aware of the online
+Guix and Emacs-Guix manuals, so "M-x Info-goto-node-web" works for them.  It
+also binds "C" and "W" in "Info-mode" to "M-x guix-info-copy-node-web", which
+copies the URL of the current node to the kill ring instead of visiting it.
+
+Since it alters the state of "info.el", no autoloads are defined for it; add
+"(require 'guix-info)" to your init file to use it.
+
+** Fixed bugs
+
+*** M-x guix-devel-download-package-source
+
+It failed for packages whose source is a git reference.  Now such sources are
+downloaded with the proper "guix-download" arguments (commit and recursive
+clones are taken into account).  Contributed by tickzip.
+
+*** REPL setup
+
+Emacs-Guix is not loaded before the REPL is set up any more, which fixes the
+"delete-duplicates is not defined" error in "guix-repl.el".  Contributed by
+Sergey Trofimov.
+
+** Internal changes
+
+- "guix.el" now declares "consult" as a dependency; "configure" learned a new
+  option "--with-consult-lispdir" (see "elisp/local.mk") so that "consult"
+  can be found while byte-compiling outside of Guix
+- "elisp/guix-info.el" is installed and byte-compiled like the other Elisp
+  files
+- Fixed typos in "guix-prettify.el" and "guix-profiles.el"
+
 * Changes in 0.7.0 (since 0.6.1)
 
 This release contains a new feature =M-x guix-shell=, contributed by tusharhero.

@@ -21,23 +21,27 @@
 
 ;; This package provides a 'consult.el' frontend for 'guix locate'.
 
-;; Use it through 'M-x consult-guix-locate'. By default the prompt is in glob
+;; Use it through 'M-x guix-locate'. By default the prompt is in glob
 ;; mode, meaning that the input takes wildcards as 'guix locate -g ...'
 ;; does. That means that 'foo*bar' would match 'foobazbar'.
 
 ;;; Code:
+
+(eval-when-compile (require 'subr-x))
+
 
 (require 'seq)
 (require 'consult)
 
 (defcustom guix-locate-args
   '("guix" "locate")
-  "Command line arguments for 'guix locate'.
+  "Command line arguments for `guix locate'.
 Can be either a string, or a list of strings or expressions."
-  :type '(choice string (repeat (choice string sexp))))
+  :type '(choice string (repeat (choice string sexp)))
+  :group 'guix)
 
 (defun guix-locate--consult-guix-locate (prompt builder initial)
-  "Run 'guix locate'.
+  "Run `guix locate'.
 
 The function returns the selected file.
 The filename at point is added to the future history.
@@ -76,11 +80,10 @@ Case insensitive if IGNORE-CASE is non-nil."
                               ignore-case str))
 
 (defun guix-locate--make-consult-builder ()
-  "Build 'guix locate' command line."
+  "Build `guix locate' command line."
   (let ((cmd (consult--build-args guix-locate-args)))
     (lambda (input)
       (pcase-let* ((`(,arg . ,opts) (consult--command-split input))
-                   (flags (append cmd opts))
                    (ignore-case nil))
         (when-let* ((args (consult--split-escaped arg))
                     (args* (list
@@ -98,7 +101,7 @@ Case insensitive if IGNORE-CASE is non-nil."
 
 ;;;###autoload
 (defun guix-locate (&optional initial)
-  "Search for files with 'guix locate'.
+  "Search for files with `guix locate'.
 The file names must match the input SQLite glob.  INITIAL is the initial
 minibuffer input."
   (interactive "P")

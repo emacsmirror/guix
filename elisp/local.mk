@@ -44,6 +44,10 @@ if POPUP_DIR
   AM_ELCFLAGS += -L "$(transientlispdir)"
 endif
 
+if CONSULT_DIR
+  AM_ELCFLAGS += -L "$(consultlispdir)"
+endif
+
 if EMACS_Q
   AM_ELCFLAGS += -Q
 endif
@@ -67,6 +71,7 @@ EL_FILES =					\
   %D%/guix-help-vars.el				\
   %D%/guix-read.el				\
   %D%/guix-help.el				\
+  %D%/guix-info.el				\
   %D%/guix-about.el				\
   %D%/guix-misc.el				\
   %D%/guix-build-log.el				\

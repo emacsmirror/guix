@@ -147,6 +147,7 @@ further.
 @menu
 * Requirements::        Required and optional dependencies.
 * Using from Git::      Using without installation.
+* Using the Manual from Git::  Using the info manual from a git checkout.
 @end menu
 
 @node Requirements
@@ -196,6 +197,11 @@ Interface}).
 @uref{https://github.com/Fanael/edit-indirect, Edit-Indirect library},
 version 0.1.4 or later.  It is used only to edit synopsis/description
 in @code{guix-devel-mode} (@pxref{Development}).
+
+@item
+@uref{https://github.com/minad/consult, Consult library}, version 3.5 or
+later.  It is used to implement @kbd{M-x@tie{}guix-locate} command
+(@pxref{Miscellaneous Commands}).
 
 @item
 @uref{https://notabug.org/alezost/emacs-build-farm, Emacs-Build-Farm},
@@ -1112,6 +1118,10 @@ Open @file{@dots{}/guix/licenses.scm} and move to the specified license.
 @node Popup Interface
 @chapter Popup Interface
 
+@menu
+* Guix Popup Interface::  The @kbd{M-x@tie{}guix} command and its sub-popups.
+@end menu
+
 If you ever used Magit, you know what ``popup interface'' is
 (@pxref{Top,,, transient, Transient User and Developer Manual}).  Even
 if you are not acquainted with Magit, there should be no worries as it
@@ -1819,6 +1829,16 @@ Open a mail buffer to report a bug for GNU Guix similarly to
 Set current Emacs environment according to a specified profile.  Note
 that there is no way to restore the original environment (you have to
 restart Emacs if you wish to do it).
+
+@findex guix-locate
+@item M-x guix-locate
+Search for files in the Guix store with @kbd{M-x@tie{}guix@tie{}locate}
+interface (@pxref{Invoking guix locate,,, guix, The GNU Guix Reference
+Manual}).  The input is interpreted as an SQLite glob (as with
+@command{guix locate -g}), so @file{emacs*}@code{*.el} matches such file
+names as @file{emacs-28.2.el}.  The command is implemented with Consult
+(@pxref{Requirements}), so all the usual Consult extensions, e.g.
+previewing the selected file, are available.
 
 @findex guix-pull
 @item M-x guix-pull

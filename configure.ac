@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Emacs-Guix.  If not, see <http://www.gnu.org/licenses/>.
 ]])
 
-AC_INIT([Emacs-Guix], [0.7.0], [alezost@gmail.com], [emacs-guix])
+AC_INIT([Emacs-Guix], [0.8.0], [alezost@gmail.com], [emacs-guix])
 
 AC_COPYRIGHT(EMACS_GUIX_CONFIGURE_COPYRIGHT)
 
@@ -139,11 +139,19 @@ AC_ARG_WITH([transient-lispdir],
   [transientlispdir="no"])
 AC_SUBST([transientlispdir])
 
+AC_ARG_WITH([consult-lispdir],
+  [AS_HELP_STRING([--with-consult-lispdir],
+    [directory with consult.el file])],
+  [consultlispdir="$withval"],
+  [consultlispdir="no"])
+AC_SUBST([consultlispdir])
+
 AM_CONDITIONAL([GEISER_DIR], [test "x$geiserlispdir" != "xno"])
 AM_CONDITIONAL([DASH_DIR], [test "x$dashlispdir" != "xno"])
 AM_CONDITIONAL([BUI_DIR], [test "x$builispdir" != "xno"])
 AM_CONDITIONAL([EDITINDIRECT_DIR], [test "x$editindirectlispdir" != "xno"])
 AM_CONDITIONAL([POPUP_DIR], [test "x$transientlispdir" != "xno"])
+AM_CONDITIONAL([CONSULT_DIR], [test "x$consultlispdir" != "xno"])
 
 dnl If all elisp dependencies are specified, we can use "emacs -Q" for
 dnl byte-compilation.  Otherwise, "emacs" will be used, and it will
@@ -153,7 +161,8 @@ AM_CONDITIONAL([EMACS_Q],
         "x$dashlispdir" != "xno" -a \
         "x$builispdir" != "xno" -a \
         "x$editindirectlispdir" != "xno" -a \
-        "x$transientlispdir" != "xno"])
+        "x$transientlispdir" != "xno" -a \
+        "x$consultlispdir" != "xno"])
 
 dnl ----------------------------------------------------------------
 
